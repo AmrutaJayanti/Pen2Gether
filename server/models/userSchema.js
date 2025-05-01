@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-const UserSchema={
+const UserSchema=new mongoose.Schema({
     name:{
         type:String,
         unique:false,
@@ -13,14 +13,13 @@ const UserSchema={
     },
     password:{
         type:String,
-        match:/^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[@$!%?&])[A-Za-z\d@$!%?&]{8,}$/,
-        required:true,
-        unique:true
+        required:true
     },
-    confirmPassword:{
+    role:{
         type:String,
-        required:true,
-        unique:true
+        enum:["user","admin"],
+        default:"user",
+        required:false
     }
-}
+});
 export default mongoose.model("User",UserSchema);
