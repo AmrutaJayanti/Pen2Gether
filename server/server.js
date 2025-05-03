@@ -6,6 +6,7 @@ import multer from "multer";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import User from "./models/userSchema.js"; // make sure this file also uses ESM
+import Document from "./models/documentSchema.js";
 
 dotenv.config();
 
@@ -53,6 +54,7 @@ app.post('/login',async(req,res)=>{
     const {email,password}=req.body;
     try{
         let data=await User.findOne({email});
+        console.log(data);
         if(!data){
             return res.status(400).json({message:"User does not exist"});
         }
@@ -60,7 +62,7 @@ app.post('/login',async(req,res)=>{
         if (!isMatch) {
             return res.status(400).json({ message: "Incorrect password" });
         }
-        let jwtToken=jwt.sign({email,password},JWT_SECRET,{expiresIn:'1h'});
+        let jwtToken=jwt.sign({_id:data._id,email,password},JWT_SECRET,{expiresIn:'1h'});
         res.status(200).json({message:"Login successful",jwtToken});
     }
     catch (err) {
@@ -69,4 +71,30 @@ app.post('/login',async(req,res)=>{
     }
 });
 
+function authenticateUser(req,res,next){
+    let token=req.headers.authorization&& req.headers.authorization.split(" ")[1];
+    if(!token) return res.status(401).json({message:"No token provided"});
+    jwt.verify(token,JWT_SECRET,(err,decoded)=>{
+        if(err) return res.status(403).json({message:"Invalid token"});
+        req.user=decoded;
+        next();
+    })
+}
+// generateUserId("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNuZWhhQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiU25laGFAMDIiLCJpYXQiOjE3NDYyNTMwOTUsImV4cCI6MTc0NjI1NjY5NX0.maDJIpN6LsIM2J8EL3pN9z3P0oAMbHNAIGmPeCEEzwc");
+app.post('/createDoc',authenticateUser,async(req,res)=>{
+    const {name,content}=req.body;
+    try{
+        const existingDoc=await Document.findOne({name});
+        if(existingDoc){
+            return res.status(400).json({message: `${name} already exists`});
+        }
+        const newDoc=await Document.create({name,content,owner:req.user._id,collaborators:[req.user._id]});
+        await newDoc.save();
+        res.status(200).json({document:newDoc,message:"Document Created"});
+    }
+    catch (err) {
+        console.log("Error occurred ", err);
+        res.status(500).json({ message: "Internal Server error" });
+    }
+});
 app.listen(5000, () => console.log("Server is running"));
