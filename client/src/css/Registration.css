@@ -1,0 +1,79 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(235deg, white, #87ebf0);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.form-container {
+    height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3%;
+}
+
+form {
+    height: auto;
+    width: 100%;
+    max-width: 400px;
+    border: 2px solid rgb(187, 237, 246);
+    padding: 2rem;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 10px 10px 10px rgba(160, 198, 209, 0.627);
+    background-color: rgba(251, 251, 251, 0.57);
+    text-shadow: 1px 1px 2px #789997;
+}
+
+form div {
+    width: 100%;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+label {
+    font-size: 1.2rem;
+    margin-bottom: 0.4rem;
+    color: #2f4f4f;
+}
+
+input {
+    font-size: 1rem;
+    padding: 0.5rem;
+    width: 100%;
+    border: 1px solid white;
+    box-shadow: inset 5px 5px 10px white;
+    border-radius: 5px;
+    background-color: rgba(167, 208, 238, 0.651);
+    color: white;
+}
+
+#but {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+button {
+    margin-top: 0.5rem;
+    width: 40%;
+    padding: 0.6rem;
+    background-color: #66d7d2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+    background-color: #4fc0bd;
+    transform: scale(1.05);
+}

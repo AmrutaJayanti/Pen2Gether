@@ -4,6 +4,7 @@ import {BrowserRouter,Routes,Route} from "react-router-dom";
 import NavBar from './components/NavBar';
 import Home from './components/Home';
 import Login from './components/Login';
+import Registration from './components/Registration';
 import MultiPageQuillEditor from './components/MultiPageQuillEditor';
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/" element={<NavBar/>}>
             <Route index element={<Home/>}/>
             <Route path='/login' element={<Login/>}/>
+            <Route path='/register' element={<Registration/>}/>
             <Route path="/document" element={<MultiPageQuillEditor/>}/>
           </Route>
         </Routes>
