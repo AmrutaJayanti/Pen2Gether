@@ -5,7 +5,7 @@ const DocumentSchema=new mongoose.Schema({
         required:true,
         unique:true
     },
-    content:Object,
+    content: mongoose.Schema.Types.Mixed,
     owner:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"User"

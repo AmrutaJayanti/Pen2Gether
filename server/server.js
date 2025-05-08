@@ -97,4 +97,21 @@ app.post('/createDoc',authenticateUser,async(req,res)=>{
         res.status(500).json({ message: "Internal Server error" });
     }
 });
+
+app.get('/getdoc/:id',authenticateUser,async(req,res)=>{
+    const {documentId}=req.params;
+    try{
+        const document=await Document.findOne({documentId}).populate("owner","name").populate("collaborators","name");
+        if(!document){
+            return res.status(400).json({message:"No document found"});
+        }
+        return res.status(200).json({document:document});
+    }
+    catch (err) {
+        console.log("Error occurred ", err);
+        res.status(500).json({ message: "Internal Server error" });
+    }
+});
+
+
 app.listen(5000, () => console.log("Server is running"));
