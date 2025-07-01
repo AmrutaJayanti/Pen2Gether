@@ -7,6 +7,8 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import User from "./models/userSchema.js"; // make sure this file also uses ESM
 import Document from "./models/documentSchema.js";
+import { Server } from "socket.io";
+import { socketCtrl } from "./controllers/socket.controller.js";
 
 dotenv.config();
 
@@ -113,5 +115,27 @@ app.get('/getdoc/:id',authenticateUser,async(req,res)=>{
     }
 });
 
+//Socket coding server side
+
+const getDocById = async (documentId) => {
+    try {
+        const document = await Document.findById(documentId);
+        return document;
+    } catch (err) {
+        console.error("Error fetching document by ID:", err);
+        throw err;
+    }
+};
+
+
+const io = new Server(server, {
+  pingTimeout: 60000,
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST']
+  },
+});
+
+socketCtrl(io, getDocById);
 
 app.listen(5000, () => console.log("Server is running"));
